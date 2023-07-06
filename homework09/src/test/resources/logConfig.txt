@@ -1,0 +1,5 @@
+FILE: homework9/out/logs
+LEVEL: INFO
+MAX-SIZE: 256
+FORMAT: txt
+

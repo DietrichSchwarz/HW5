@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>New order</title>
+    <script>
+    function updateOrderCost() {
+      var products = document.querySelectorAll("[id^=product_]");
+      var orderCost = 0;
+
+      for (var i = 0; i < products.length; i++) {
+        var costInput = document.getElementById(`product_${i + 1}_cost`);
+        if (costInput) {
+          var cost = parseFloat(costInput.value);
+          if (!isNaN(cost)) {
+            orderCost += cost;
+          }
+        }
+      }
+
+      var orderCostElement = document.getElementById("order_cost");
+      if (orderCostElement) {
+        orderCostElement.textContent = orderCost.toFixed(2);
+      }
+
+      var orderCostInput = document.getElementById("order_cost_input");
+      if (orderCostInput) {
+        orderCostInput.value = orderCost.toFixed(2);
+      }
+    }
+
+    function addProduct() {
+      var productsContainer = document.getElementById("products-container");
+
+      var productNumber = productsContainer.children.length + 1;
+
+      var productDiv = document.createElement("div");
+      productDiv.innerHTML = `
+        <h3>Product ${productNumber}</h3>
+        <label for="product_${productNumber}_name">Product name:</label>
+        <input type="text" id="product_${productNumber}_name" name="products[${productNumber - 1}].name" required><br><br>
+
+        <label for="product_${productNumber}_cost">Product cost:</label>
+        <input type="number" step="0.01" id="product_${productNumber}_cost" name="products[${productNumber - 1}].cost" required onchange="updateOrderCost()"><br><br>
+      `;
+
+      productsContainer.appendChild(productDiv);
+      updateOrderCost();
+    }
+
+
+    </script>
+</head>
+<body>
+<h1>New order</h1>
+
+<form th:method="POST" th:action="@{/orders}" th:object="${order}">
+
+    <label for="order_cost">Order cost:</label>
+    <span id="order_cost" th:text="${order.cost}"></span>
+    <input type="hidden" id="order_cost_input" th:field="*{cost}" />
+    <br><br>
+
+    <div id="products-container">
+    </div>
+
+    <button type="button" onclick="addProduct()">Add product</button>
+    <br><br>
+
+    <input type="submit" value="Create order">
+</form>
+</body>
+</html>

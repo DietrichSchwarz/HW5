@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>All orders</title>
+</head>
+<body>
+<h1>Order list</h1>
+<style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+
+
+</style>
+<table>
+    <tr>
+        <th>id</th>
+        <th>date</th>
+        <th>cost</th>
+        <th>products</th>
+    </tr>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.getId}"></td>
+        <td th:text="${order.getDate}"></td>
+        <td th:text="${order.getCost}"></td>
+        <td>
+            <table>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>cost</th>
+                </tr>
+                <tr th:each="product : ${order.getProducts}">
+                    <td th:text="${product.getId}"></td>
+                    <td th:text="${product.getName}"></td>
+                    <td th:text="${product.getCost}"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
